@@ -6,6 +6,16 @@ quilt on noble does **not** accept `-d <dir>` as a global flag. Always `cd "$SOU
 
 Package directories live under `pkgs/` (`PATCHES_DIR="$REPO_DIR/pkgs"`), separate from tooling (`scripts/`, `crash-dashboard/`) and repo config (dotdirectories) at the top level. Discovery loops (`for d in "$PATCHES_DIR"/*/`) don't need to filter by name — everything under `pkgs/` is a package.
 
+## Version bump: `+ep1`
+
+`build.sh` runs `dch --local +ep` before `dpkg-buildpackage`, so a patched build installs as `<archive version>+ep1`.
+
+Without it, the local `.deb` carries the archive's exact version string but different metadata (`Installed-Size`, shlibs-derived `Depends`). apt then holds two `Version` records under one version string, picks the archive's as the candidate, and permanently lists the package as `[upgradable from: <same version>]`. The next `apt full-upgrade` — which `~/bin/sup` runs before `ep rebuild --all` — puts the stock build back over the patched one, `rebuild.sh`'s `installed_hash` sees the files changed, and it rebuilds. Every `sup` run, forever.
+
+`+ep1` sorts above the archive version, so apt leaves it alone; a genuinely newer archive version still sorts above `+ep1` and upgrades normally, which then triggers exactly one rebuild. The bump is guarded by a `grep '+ep1)' debian/changelog` so a repeated `ep build` on the same tree doesn't stack `+ep2`, `+ep3`.
+
+`--install` therefore installs every `.deb` matching the new version (`*_${BUILT_VERSION}_*.deb`), not just `${PACKAGE}_*.deb`: siblings such as `libgala0` carry a `(= version)` dependency on the main binary and must move together. It filters that set to binaries already installed — a source can also produce packages this system never had (`appcenter-casper` needs live-CD-only `casper`, `pantheon-terminal` is a transitional dummy), and `dpkg -i` on those fails the whole install.
+
 ## Local, untracked patches
 
 `pkgs/<package>/local/` is an optional second series directory, same shape as `pkgs/<package>/` (its own `series` + numbered `.patch` files), gitignored via `pkgs/*/local/`. It's for patches you want applied on your machine but never committed — WIP, or anything too speculative/personal for the tracked series.

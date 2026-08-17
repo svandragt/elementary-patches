@@ -31,6 +31,19 @@ sudo apt build-dep "$PACKAGE" -y
 
 echo "==> Building..."
 cd "$SOURCE_DIR"
+
+# Build as <archive version>+ep1. At the archive's own version string the local
+# .deb still differs in metadata (Installed-Size, shlibs deps), so apt records a
+# second version under the same string, lists the package as upgradable, and the
+# next full-upgrade puts the stock build back over the patched one. A strictly
+# greater version ends that loop; a real archive update still sorts above +ep1.
+if ! grep -q '+ep1)' debian/changelog; then
+    DEBEMAIL="${DEBEMAIL:-$USER@localhost}" DEBFULLNAME="${DEBFULLNAME:-elementary-patches}" \
+        dch --local +ep --nomultimaint "Local patched build (elementary-patches)"
+fi
+BUILT_VERSION=$(dpkg-parsechangelog -S Version)
+BUILT_VERSION="${BUILT_VERSION#*:}"   # .deb filenames carry no epoch
+
 dpkg-buildpackage -us -uc -b -j"$(nproc)"
 
 echo ""
@@ -39,7 +52,18 @@ find "$WORK_DIR" -maxdepth 1 -name "*.deb" | sort
 
 if [[ "$INSTALL" == "--install" ]]; then
     echo "==> Installing..."
-    DEBS=$(find "$WORK_DIR" -maxdepth 1 -name "${PACKAGE}_*.deb" | sort)
+    # Every already-installed binary from this build, not just $PACKAGE:
+    # siblings such as libgala0 carry a (= version) dependency and must move
+    # together. Binaries the system never had are skipped — appcenter-casper
+    # needs live-CD-only 'casper', and pulling it in just fails the install.
+    # `|| true`: the filter loop reports non-zero when it skips a package, and
+    # an empty list is handled below, not by set -e.
+    DEBS=$(find "$WORK_DIR" -maxdepth 1 -name "*_${BUILT_VERSION}_*.deb" | sort | while read -r deb; do
+        name=$(dpkg-deb -f "$deb" Package)
+        if [[ "$(dpkg-query -W -f='${Status}' "$name" 2>/dev/null)" == "install ok installed" ]]; then
+            echo "$deb"
+        fi
+    done) || true
     if [[ -z "$DEBS" ]]; then
         echo "Warning: no .deb found matching $PACKAGE"
     else
