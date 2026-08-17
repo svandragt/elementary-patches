@@ -68,7 +68,7 @@
      private void close_bubble (uint32 id) {
          Bubble? bubble;
  
-@@ -204,6 +238,11 @@
+@@ -185,6 +219,11 @@
                      }
  
                      bubbles[id].present ();

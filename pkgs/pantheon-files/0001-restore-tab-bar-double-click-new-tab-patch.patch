@@ -1,9 +1,9 @@
---- pantheon-files-7.3.1+r6736+pkg143~ubuntu8.1.orig/src/View/Window.vala
-+++ pantheon-files-7.3.1+r6736+pkg143~ubuntu8.1/src/View/Window.vala
-@@ -254,6 +254,16 @@
+--- pantheon-files-7.3.2+r6768+pkg144~ubuntu8.1.orig/src/View/Window.vala
++++ pantheon-files-7.3.2+r6768+pkg144~ubuntu8.1/src/View/Window.vala
+@@ -267,6 +267,16 @@
              view = tab_view
          };
-
+ 
 +        var tab_bar_click = new Gtk.GestureMultiPress (tab_bar) {
 +            button = Gdk.BUTTON_PRIMARY
 +        };

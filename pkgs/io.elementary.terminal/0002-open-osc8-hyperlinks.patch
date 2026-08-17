@@ -1,6 +1,6 @@
---- io.elementary.terminal-8.0.0+r2909+pkg98~ubuntu8.1.orig/src/Widgets/TerminalWidget.vala
-+++ io.elementary.terminal-8.0.0+r2909+pkg98~ubuntu8.1/src/Widgets/TerminalWidget.vala
-@@ -965,6 +965,13 @@
+--- io.elementary.terminal-8.1.0+r2936+pkg99~ubuntu8.1.orig/src/Widgets/TerminalWidget.vala
++++ io.elementary.terminal-8.1.0+r2936+pkg99~ubuntu8.1/src/Widgets/TerminalWidget.vala
+@@ -945,6 +945,13 @@
          }
  
          private string? get_link (double x, double y) {
