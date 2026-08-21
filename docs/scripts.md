@@ -20,6 +20,10 @@ Without it, the local `.deb` carries the archive's exact version string but diff
 
 `build.sh` runs `dpkg-checkbuilddeps` first and only calls `sudo apt build-dep` when a dependency is missing. Running `build-dep` unconditionally stalls a non-interactive rebuild on the sudo password prompt even when nothing needs installing.
 
+## `rebuild --all` skips uninstalled packages
+
+`rebuild.sh` expands `--all` to only the packages with at least one binary installed (`source_has_installed_binary`, via `apt-cache showsrc` + `dpkg-query`). Building a package whose binaries aren't installed just compiles `.deb`s that `build.sh`'s install filter drops anyway. An explicit target (`ep rebuild <package>`) always builds — the user asked for it. A source apt doesn't recognise is built rather than second-guessed.
+
 ## Local, untracked patches
 
 `pkgs/<package>/local/` is an optional second series directory, same shape as `pkgs/<package>/` (its own `series` + numbered `.patch` files), gitignored via `pkgs/*/local/`. It's for patches you want applied on your machine but never committed — WIP, or anything too speculative/personal for the tracked series.

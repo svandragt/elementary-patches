@@ -61,10 +61,26 @@ installed_hash() {
         2>/dev/null | sha256sum | awk '{print $1}'
 }
 
+# True when at least one binary built by the source package is installed.
+# --all skips packages with nothing installed: building them would compile a
+# .deb that build.sh's install filter then drops anyway. An explicit target is
+# always built — the user asked for it.
+source_has_installed_binary() {
+    local bins
+    bins=$(apt-cache showsrc "$1" 2>/dev/null | sed -n 's/^Binary: //p' | tr ',' ' ')
+    [[ -z "$bins" ]] && return 0   # unknown source: don't second-guess, build it
+    dpkg-query -W -f='${db:Status-Status}\n' $bins 2>/dev/null | grep -q '^installed'
+}
+
 PACKAGES=()
 if [[ "$TARGET" == "--all" ]]; then
     for d in "$PATCHES_DIR"/*/; do
-        PACKAGES+=("$(basename "$d")")
+        name="$(basename "$d")"
+        if source_has_installed_binary "$name"; then
+            PACKAGES+=("$name")
+        else
+            echo "==> $name: no binary installed — skipping (rebuild it directly to force)"
+        fi
     done
 else
     if [[ ! -d "$PATCHES_DIR/$TARGET" ]]; then
