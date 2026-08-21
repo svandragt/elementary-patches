@@ -26,8 +26,14 @@ fi
 echo "==> Ensuring all patches are applied..."
 (cd "$SOURCE_DIR" && QUILT_PC="$SOURCE_DIR/.pc" QUILT_PATCHES="$SOURCE_DIR/patches" quilt --quiltrc "$REPO_DIR/quiltrc" push -a) 2>/dev/null || true
 
-echo "==> Installing build dependencies..."
-sudo apt build-dep "$PACKAGE" -y
+# Skip the sudo apt build-dep when deps are already satisfied, so a rebuild
+# doesn't stall on a password prompt in a non-interactive session.
+if (cd "$SOURCE_DIR" && dpkg-checkbuilddeps) 2>/dev/null; then
+    echo "==> Build dependencies already satisfied"
+else
+    echo "==> Installing build dependencies..."
+    sudo apt build-dep "$PACKAGE" -y
+fi
 
 echo "==> Building..."
 cd "$SOURCE_DIR"
