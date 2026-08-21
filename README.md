@@ -16,6 +16,7 @@ bother me enough to maintain them locally.
 | [io.elementary.terminal](pkgs/io.elementary.terminal/) | [series](pkgs/io.elementary.terminal/series) | <ul><li>Restore double-click on empty tab bar to open a new tab (GTK4 regression)</li><li>Open OSC 8 hyperlinks on ctrl-click</li><li>Add "Set Title…" to the tab context menu</li></ul> |
 | [pantheon-files](pkgs/pantheon-files/) | [series](pkgs/pantheon-files/series) | Double-click on empty tab bar opens a new tab (matches terminal behavior) |
 | [appcenter](pkgs/appcenter/) | [series](pkgs/appcenter/series) | Don't show AppCenter in the dock with a "0" badge when there are no pending updates |
+| [plank](pkgs/plank/) | [series](pkgs/plank/series) | Stop a left-edge dock from shifting inward by its own width after resume from standby (and on monitor/resolution changes). The Ubuntu positioning patch uses the monitor workarea for non-GNOME desktops, which already has Plank's own reserved strut subtracted — self-referential, and re-triggered whenever the WM re-broadcasts a monitor change. Treat Pantheon like GNOME and use the full monitor geometry. |
 
 Target: elementary OS 8 (Ubuntu 24.04 / noble).
 
