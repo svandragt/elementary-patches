@@ -16,6 +16,10 @@ Without it, the local `.deb` carries the archive's exact version string but diff
 
 `--install` therefore installs every `.deb` matching the new version (`*_${BUILT_VERSION}_*.deb`), not just `${PACKAGE}_*.deb`: siblings such as `libgala0` carry a `(= version)` dependency on the main binary and must move together. It filters that set to binaries already installed — a source can also produce packages this system never had (`appcenter-casper` needs live-CD-only `casper`, `pantheon-terminal` is a transitional dummy), and `dpkg -i` on those fails the whole install.
 
+## Build dependencies
+
+`build.sh` runs `dpkg-checkbuilddeps` first and only calls `sudo apt build-dep` when a dependency is missing. Running `build-dep` unconditionally stalls a non-interactive rebuild on the sudo password prompt even when nothing needs installing.
+
 ## Local, untracked patches
 
 `pkgs/<package>/local/` is an optional second series directory, same shape as `pkgs/<package>/` (its own `series` + numbered `.patch` files), gitignored via `pkgs/*/local/`. It's for patches you want applied on your machine but never committed — WIP, or anything too speculative/personal for the tracked series.
