@@ -17,6 +17,7 @@ bother me enough to maintain them locally.
 | [pantheon-files](pkgs/pantheon-files/) | [series](pkgs/pantheon-files/series) | Double-click on empty tab bar opens a new tab (matches terminal behavior) |
 | [appcenter](pkgs/appcenter/) | [series](pkgs/appcenter/series) | Don't show AppCenter in the dock with a "0" badge when there are no pending updates |
 | [plank](pkgs/plank/) | [series](pkgs/plank/series) | Stop a left-edge dock from shifting inward by its own width after resume from standby (and on monitor/resolution changes). The Ubuntu positioning patch uses the monitor workarea for non-GNOME desktops, which already has Plank's own reserved strut subtracted — self-referential, and re-triggered whenever the WM re-broadcasts a monitor change. Treat Pantheon like GNOME and use the full monitor geometry. |
+| [slingshot-launcher](pkgs/slingshot-launcher/) | [series](pkgs/slingshot-launcher/series) | Show the selected search result in the Applications Menu. The row highlight only styled `modelbutton:focus`, but the auto-selected first result has `:selected` without `:focus` while you type in the search bar — so it stayed invisible until you arrowed into the list. Style `:selected` too, so the result Enter will launch is always highlighted. |
 
 Target: elementary OS 8 (Ubuntu 24.04 / noble).
 
