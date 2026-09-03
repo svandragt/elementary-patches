@@ -100,8 +100,8 @@ rebuild_one() {
     echo "===== $PACKAGE ====="
 
     # Download the latest source files (cached in WORK_DIR, cheap if current)
-    if ! (cd "$WORK_DIR" && apt source --download-only "$PACKAGE"); then
-        echo "!!! apt source failed for $PACKAGE"
+    if ! (cd "$WORK_DIR" && apt-get source --download-only "$PACKAGE"); then
+        echo "!!! apt-get source failed for $PACKAGE"
         return 1
     fi
 

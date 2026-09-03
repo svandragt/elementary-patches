@@ -18,7 +18,7 @@ Without it, the local `.deb` carries the archive's exact version string but diff
 
 ## Build dependencies
 
-`build.sh` runs `dpkg-checkbuilddeps` first and only calls `sudo apt build-dep` when a dependency is missing. Running `build-dep` unconditionally stalls a non-interactive rebuild on the sudo password prompt even when nothing needs installing.
+`build.sh` runs `dpkg-checkbuilddeps` first and only calls `sudo apt-get build-dep` when a dependency is missing. Running `build-dep` unconditionally stalls a non-interactive rebuild on the sudo password prompt even when nothing needs installing.
 
 ## `rebuild --all` skips uninstalled packages
 

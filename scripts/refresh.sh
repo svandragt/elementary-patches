@@ -38,7 +38,7 @@ if [[ "$MODE" == "--rebase" ]]; then
     echo "==> Fetching new upstream source..."
     cd "$WORK_DIR"
     OLD_VERSION=$(basename "$SOURCE_DIR")
-    apt source "$PACKAGE"
+    apt-get source "$PACKAGE"
     NEW_SOURCE_DIR=$(find "$WORK_DIR" -maxdepth 1 -type d -name "${PACKAGE}-*" | sort -V | tail -1)
 
     if [[ "$NEW_SOURCE_DIR" == "$SOURCE_DIR" ]]; then

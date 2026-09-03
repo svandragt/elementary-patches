@@ -34,7 +34,7 @@ mkdir -p "$WORK_DIR"
 
 # Fetch latest source files (cached in WORK_DIR, cheap if current)
 echo "==> Fetching source for $PACKAGE..."
-(cd "$WORK_DIR" && apt source --download-only "$PACKAGE")
+(cd "$WORK_DIR" && apt-get source --download-only "$PACKAGE")
 
 DSC=$(find "$WORK_DIR" -maxdepth 1 -name "${PACKAGE}_*.dsc" 2>/dev/null | sort -V | tail -1)
 if [[ -z "$DSC" ]]; then
