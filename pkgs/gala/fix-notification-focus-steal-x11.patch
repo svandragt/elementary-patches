@@ -1,6 +1,6 @@
---- gala-8.5.1+r3055+pkg132~ubuntu8.1.orig/src/WindowManager.vala
-+++ gala-8.5.1+r3055+pkg132~ubuntu8.1/src/WindowManager.vala
-@@ -709,6 +709,18 @@
+--- gala-8.6.0+r3140+pkg133~ubuntu8.1.orig/src/WindowManager.vala
++++ gala-8.6.0+r3140+pkg133~ubuntu8.1/src/WindowManager.vala
+@@ -567,6 +567,18 @@
          private void on_focus_window_changed () {
              unowned var display = get_display ();
  
@@ -16,6 +16,6 @@
 +                return;
 +            }
 +
-             if (!is_modal () || modal_stack.peek_head ().grab != null || display.focus_window == null ||
-                 ShellClientsManager.get_instance ().is_shell_window (display.focus_window)
-             ) {
+             if (!is_modal () || modal_stack.peek_head ().grab != null || display.focus_window == null) {
+                 return;
+             }

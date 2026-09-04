@@ -11,8 +11,8 @@ Description: Force keyboard focus when raising a window that demands attention.
  Use get_current_time_roundtrip() to obtain a fresh server timestamp
  strictly newer than any prior input event, so the activation passes
  mutter's focus-steal check.
---- gala-8.5.1+r3055+pkg132~ubuntu8.1.orig/src/WindowAttentionTracker.vala
-+++ gala-8.5.1+r3055+pkg132~ubuntu8.1/src/WindowAttentionTracker.vala
+--- gala-8.6.0+r3140+pkg133~ubuntu8.1.orig/src/Misc/WindowAttentionTracker.vala
++++ gala-8.6.0+r3140+pkg133~ubuntu8.1/src/Misc/WindowAttentionTracker.vala
 @@ -10,7 +10,8 @@
      }
  
