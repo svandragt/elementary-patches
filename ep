@@ -15,6 +15,7 @@ case "$CMD" in
     edit)     bash "$SCRIPTS/edit.sh" "$@" ;;
     refresh)  bash "$SCRIPTS/refresh.sh" "$@" ;;
     build)    bash "$SCRIPTS/build.sh" "$@" ;;
+    restart)  bash "$SCRIPTS/restart.sh" "$@" ;;
     rebuild)  bash "$SCRIPTS/rebuild.sh" "$@" ;;
     status)   bash "$SCRIPTS/status.sh" "$@" ;;
     help|--help|-h)
@@ -27,6 +28,7 @@ case "$CMD" in
         echo "  ep refresh <package>             Refresh top patch after editing"
         echo "  ep refresh <package> --rebase    Rebase all patches onto new upstream"
         echo "  ep build   <package> [--install] Build package, optionally install"
+        echo "  ep restart <package>             Restart the package's systemd user service"
         echo "  ep rebuild <package>|--all [--no-install] [--force]"
         echo "                                   Fetch latest source, re-apply, build, install"
         echo "                                   (skips packages already built at the current"

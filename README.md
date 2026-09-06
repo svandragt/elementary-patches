@@ -65,6 +65,10 @@ cat quiltrc >> ~/.quiltrc        # one time
 upstream package will be replaced; remove it later with
 `sudo apt install --reinstall io.elementary.notifications` to revert.
 
+A new gala build goes live with `./ep restart gala`, which restarts its systemd
+user unit in place; windows survive. Don't use `gala --replace` — the unit
+restarts itself alongside the manual process and the session fails.
+
 ### Reverting
 
 ```bash
@@ -86,6 +90,7 @@ ep edit    <package> <file>       Add a file to current patch and open editor
 ep refresh <package>              Refresh top patch after editing
 ep refresh <package> --rebase     Rebase all patches onto new upstream version
 ep build   <package> [--install]  Build package, optionally install it
+ep restart <package>              Restart the package's systemd user service (gala)
 ep rebuild <package>|--all        Fetch latest source, re-apply patches, build and install
                                   (--no-install to only build, --force to ignore the
                                   up-to-date check)
