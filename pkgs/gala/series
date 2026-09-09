@@ -3,3 +3,4 @@ fix-attention-focus-stealing.patch
 fix-notification-focus-steal-x11.patch
 fix-notification-destroy-use-after-free.patch
 fix-window-menu-empty-on-daemon-race.patch
+fix-startup-crashes-pass-through-and-thaw.patch

@@ -1,0 +1,37 @@
+--- a/lib/Utils.vala
++++ b/lib/Utils.vala
+@@ -278,7 +278,12 @@
+             unowned var xdisplay = x11_display.get_xdisplay ();
+ 
+             int count, ordering;
+-            regions[window] = X.Shape.get_rectangles (xdisplay, x_window, 2, out count, out ordering)[0];
++            var rectangles = X.Shape.get_rectangles (xdisplay, x_window, 2, out count, out ordering);
++            // The X window can already be gone when a shell window changes focus during startup.
++            if (rectangles == null || count == 0) {
++                return;
++            }
++            regions[window] = rectangles[0];
+ 
+             X.Xrectangle rect = {};
+             var region = X.Fixes.create_region (xdisplay, {rect});
+--- a/src/Misc/WorkspaceManager.vala
++++ b/src/Misc/WorkspaceManager.vala
+@@ -73,11 +73,16 @@
+      * Undo the effect of freeze_remove()
+      */
+     public void thaw_remove () {
++        // Callers such as the workspace-added jump path thaw without a matching
++        // freeze; treat that as a no-op instead of aborting the compositor.
++        if (remove_freeze_count <= 0) {
++            warning ("thaw_remove without matching freeze_remove");
++            return;
++        }
++
+         if (GLib.AtomicInt.dec_and_test (ref remove_freeze_count)) {
+             queue_check_workspaces ();
+         }
+-
+-        assert (remove_freeze_count >= 0);
+     }
+ 
+     private void queue_check_workspaces () {
