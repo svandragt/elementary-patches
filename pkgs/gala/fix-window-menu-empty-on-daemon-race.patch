@@ -1,0 +1,25 @@
+--- a/daemon-gtk3/DBus.vala
++++ b/daemon-gtk3/DBus.vala
+@@ -20,18 +20,12 @@
+     private List<MonitorLabel> monitor_labels = new List<MonitorLabel> ();
+ 
+     construct {
+-        load_window_menu.begin ();
++        // Build the menu whenever gala (re)acquires the name: fetching the model
++        // once at startup races gala's export and leaves the menu empty forever.
++        Bus.watch_name (SESSION, "io.elementary.gala.WindowMenu", NONE, load_window_menu, null);
+     }
+ 
+-    private async void load_window_menu () {
+-        DBusConnection connection;
+-        try {
+-            connection = yield Bus.get (SESSION, null);
+-        } catch (Error e) {
+-            warning ("Failed to get DBus connection: %s", e.message);
+-            return;
+-        }
+-
++    private void load_window_menu (DBusConnection connection, string name, string name_owner) {
+         var menu_model = DBusMenuModel.get (connection, "io.elementary.gala.WindowMenu", "/io/elementary/gala/WindowMenu");
+         var action_group = DBusActionGroup.get (connection, "io.elementary.gala.WindowMenu", "/io/elementary/gala/WindowMenu");
+ 
